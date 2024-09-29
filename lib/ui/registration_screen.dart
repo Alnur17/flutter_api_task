@@ -1,29 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_task/ui/registration_screen.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
 import '../utils/color.dart';
 import '../utils/text_style.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegistrationScreen extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final AuthController authController = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  LoginScreen({super.key});
+  RegistrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+      appBar: AppBar(title: Text("Register")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: 'Name'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+              ),
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(labelText: 'Email'),
@@ -55,27 +65,27 @@ class LoginScreen extends StatelessWidget {
                   return controller.isLoading
                       ? CircularProgressIndicator()
                       : ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryColor,
-                          ),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              controller.login(
-                                emailController.text,
-                                passwordController.text,
-                              );
-                            }
-                          },
-                          child: Text("Login", style: AppTextStyle.button),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryColor,
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        controller.register(
+                          nameController.text,
+                          emailController.text,
+                          passwordController.text,
                         );
+                      }
+                    },
+                    child: Text("Register", style: AppTextStyle.button),
+                  );
                 },
               ),
               TextButton(
                 onPressed: () {
-                  Get.to(() => RegistrationScreen());
+                  Get.back(); // Navigate back to login screen
                 },
-                child: Text("Don't have an account? Register",
-                    style: AppTextStyle.body),
+                child: Text("Already have an account? Login", style: AppTextStyle.body),
               ),
             ],
           ),
