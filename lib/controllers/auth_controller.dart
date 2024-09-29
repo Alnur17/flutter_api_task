@@ -1,3 +1,4 @@
+// AuthController
 import 'package:get/get.dart';
 
 import '../services/api_services.dart';
@@ -12,32 +13,22 @@ class AuthController extends GetxController {
     isLoading = true;
     update();
 
-    var response = await ApiService.login(email, password, fcmToken!);
+    try {
+      var response = await ApiService.login(email, password, fcmToken!);
 
-    if (response != null) {
-      Get.to(() => ProfileScreen(token: response['token']));
-    } else {
-      // Handle login error
+      if (response != null) {
+        // Navigate to ProfileScreen after successful login
+        Get.to(() => ProfileScreen(token: response['token']));
+      } else {
+        Get.snackbar("Login Error", "Invalid email or password",
+            snackPosition: SnackPosition.BOTTOM);
+      }
+    } catch (error) {
+      Get.snackbar("Login Error", error.toString(),
+          snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isLoading = false;
+      update();
     }
-
-    isLoading = false;
-    update();
-  }
-
-  Future<void> register(String name, String email, String password) async {
-    String? fcmToken = await FCMService.getFCMToken();
-    isLoading = true;
-    update();
-
-    var response = await ApiService.register(name, email, password, fcmToken!);
-
-    if (response != null) {
-      Get.to(() => ProfileScreen(token: response['token']));
-    } else {
-      // Handle registration error
-    }
-
-    isLoading = false;
-    update();
   }
 }

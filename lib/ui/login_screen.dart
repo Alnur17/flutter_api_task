@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_task/ui/registration_screen.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
@@ -36,6 +35,7 @@ class LoginScreen extends StatelessWidget {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: passwordController,
                 decoration: InputDecoration(labelText: 'Password'),
@@ -72,7 +72,6 @@ class LoginScreen extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  Get.to(() => RegistrationScreen());
                 },
                 child: Text("Don't have an account? Register",
                     style: AppTextStyle.body),
